@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Student Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #00bcd4;
+            --primary-dark: #0097a7;
+            --secondary: #232526;
+            --accent: #ff4081;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --bg-dark: #181a20;
+            --card-dark: #232526;
+            --card-hover: #2c2f31;
+            --success: #00c853;
+            --warning: #ffab00;
+            --gradient: linear-gradient(135deg, #232526 0%, #414345 100%);
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary); /* Ensures all text is visible */
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 0.8rem 1rem;
+        }
+        
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white; /* Ensures button text is visible */
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3);
+            color: white;
+        }
+        
+        .btn-logout {
+            background: rgba(255, 64, 129, 0.15);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary); /* Explicitly set color */
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .card {
+            background: var(--card-dark);
+            color: var(--text-primary); /* Ensures card text is visible */
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+            background: var(--card-hover);
+        }
+        
+        .card-header {
+            background: var(--gradient);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            color: var(--text-primary); /* Ensures header text is visible */
+        }
+        
+        .card-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.25);
+            color: var(--text-primary);
+        }
+        
+        .form-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            color: white; /* Ensures badge text is visible */
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: var(--text-primary); /* Ensures alert text is visible */
+        }
+        
+        .student-card {
+            position: relative;
+            height: 100%;
+        }
+        
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+        }
+        
+        .stats-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0, 188, 212, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+        
+        /* Explicit text color classes to ensure visibility */
+        .text-visible {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-secondary-visible {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Animation for form submission */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--gradient);">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <i class="bi bi-person-circle me-2"></i>
+        <span class="brand-text">Student Portal</span>
+    </a>
+    <div class="d-flex align-items-center">
+        <span class="me-3 d-none d-md-block text-visible">Welcome, {{ session.get('username', 'User') }}</span>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+        </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="fw-bold mb-3 text-visible">Student <span style="color: var(--primary);">Dashboard</span></h1>
+            <p class="text-secondary-visible">Manage your academic profile and view approved students</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show animate-fade" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    {% if student %}
+    <div class="row justify-content-center mb-5 animate-fade">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0 text-visible"><i class="bi bi-person-badge me-2"></i>Your Student Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="stats-icon">
+                                <i class="bi bi-123"></i>
+                            </div>
+                            <h6 class="text-secondary-visible">Roll Number</h6>
+                            <h4 class="text-visible">{{ student.roll_no }}</h4>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stats-icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <h6 class="text-secondary-visible">Full Name</h6>
+                            <h4 class="text-visible">{{ student.name }}</h4>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stats-icon">
+                                <i class="bi bi-calendar-event"></i>
+                            </div>
+                            <h6 class="text-secondary-visible">Age</h6>
+                            <h4 class="text-visible">{{ student.age }}</h4>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="stats-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <h6 class="text-secondary-visible">Department</h6>
+                            <h4 class="text-visible">{{ student.department }}</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="stats-icon">
+                                <i class="bi bi-patch-check"></i>
+                            </div>
+                            <h6 class="text-secondary-visible">Status</h6>
+                            <h4 class="text-visible">{% if student.approved %}<span class="badge bg-success">Approved</span>{% else %}<span class="badge bg-warning text-dark">Pending Approval</span>{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center mb-5 animate-fade">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0 text-visible"><i class="bi bi-person-plus me-2"></i>Complete Your Profile</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-secondary-visible mb-4">Please provide your details to create your student profile</p>
+                    <form method="post" action="{{ url_for('user_dashboard') }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="roll_no" class="form-label">Roll No</label>
+                                <input type="number" class="form-control" id="roll_no" name="roll_no" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required value="{{ session['username'] }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="department" class="form-label">Department</label>
+                                <input type="text" class="form-control" id="department" name="department" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-check-circle me-2"></i> Submit Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="divider"></div>
+    
+    <h3 class="section-title">Approved Students</h3>
+    {% if approved_students %}
+    <div class="row">
+        {% for s in approved_students %}
+        <div class="col-md-6 col-lg-4 mb-4 animate-fade">
+            <div class="card student-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title text-visible">{{ s.roll_no }}</h5>
+                        <span class="badge bg-success">Approved</span>
+                    </div>
+                    <p class="card-text mb-1 text-visible"><i class="bi bi-person me-2 text-secondary"></i> <strong>{{ s.name }}</strong></p>
+                    <p class="card-text mb-1 text-visible"><i class="bi bi-calendar-event me-2 text-secondary"></i> Age: {{ s.age }}</p>
+                    <p class="card-text mb-0 text-visible"><i class="bi bi-building me-2 text-secondary"></i> {{ s.department }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-4 animate-fade">
+        <i class="bi bi-people display-4 text-secondary"></i>
+        <h4 class="mt-3 text-secondary-visible">No approved students yet</h4>
+        <p class="text-secondary-visible">Once students are approved, they will appear here</p>
+    </div>
+    {% endif %}
+</div>
+
+<footer class="bg-dark py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0 text-secondary-visible">© 2023 Student Portal. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-secondary-visible me-3">Privacy Policy</a>
+                <a href="#" class="text-secondary-visible">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const animatedElements = document.querySelectorAll('.animate-fade');
+        
+        animatedElements.forEach((element, index) => {
+            
+            element.style.animationDelay = `${index * 0.1}s`;
+        });
+    });
+</script>
+</body>
+</html>
